@@ -1,0 +1,8 @@
+{
+  "labels": ["first", "second"],
+  "values": [20000, 39000],
+  "type": "pie",
+  "marker": {
+    "colors": ["#637cef", "#e3008c"]
+  }
+}

@@ -1,25 +1,37 @@
 import * as React from 'react';
-import { DonutChart, ChartProps, getColorFromToken, DataVizPalette } from '@fluentui/react-charts-preview';
+import { DonutChart, ChartProps, getColorFromToken } from '@fluentui/react-charts-preview';
+import plotlyDataJson from './plotlyData.json';
 
-export const DonutChartBasic = () => {
-  const points = [
-    { legend: 'first', data: 20000, color: getColorFromToken(DataVizPalette.color1), xAxisCalloutData: '2020/04/30' },
-    {
-      legend: 'second',
-      data: 39000,
-      color: getColorFromToken(DataVizPalette.color2),
-      xAxisCalloutData: '2020/04/20',
-    },
-  ];
+interface PlotlyDataInterface {
+  labels: string[];
+  values: number[];
+  type: string;
+  marker: {
+    colors: string[];
+  };
+}
+
+const convertPlotlyToChartProps = (plotlyData: PlotlyDataInterface) => {
+  const points = plotlyData.labels.map((label, index) => ({
+    legend: label,
+    data: plotlyData.values[index],
+    color: getColorFromToken(plotlyData.marker.colors[index]),
+  }));
 
   const data: ChartProps = {
     chartTitle: 'Donut chart basic example',
     chartData: points,
   };
+  return data;
+};
+
+export const DonutChartBasic = () => {
+  const chartProps = convertPlotlyToChartProps(plotlyDataJson);
+
   return (
     <DonutChart
       culture={typeof window !== 'undefined' ? window.navigator.language : 'en-us'}
-      data={data}
+      data={chartProps}
       innerRadius={55}
       href={'https://developer.microsoft.com/en-us/'}
       legendsOverflowText={'overflow Items'}
